@@ -1,13 +1,30 @@
-{
-"project": {
-  "name":"sample1",
-  "author":"sanda",
-  "description":"sample",
-  "createAt":"2023-07-19 13:47:00",
-  "blocks":[
-    
 
-  
-  ]
-}
-}
+ {
+		"name": "sample1",
+		"author": "sanda",
+		"description": "sample",
+		"createAt": "2023-07-19 13:47:00",
+    "headless":false,
+		"blocks": [
+			{
+				"type": "goto",
+				"data": {
+					"url": "http://www.w3schools.com/"
+				}
+			},
+      {
+        "type":"write",
+        "data":{
+          "target":"#search2",
+          "text":"go lang"
+        }
+      },
+      {
+        "type":"click",
+        "data":{
+          "target":"#learntocode_searchbtn"
+        }
+      }
+		]
+	}
+
