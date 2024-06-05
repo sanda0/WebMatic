@@ -1,46 +1,36 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
-	"log"
-	"os"
-	"time"
+	"embed"
 
-	"github.com/go-rod/rod"
-	"github.com/go-rod/rod/lib/launcher"
-	"github.com/sanda0/webmatic/webmaticlib"
+	"github.com/wailsapp/wails/v2"
+	"github.com/wailsapp/wails/v2/pkg/options"
+	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 )
 
+//go:embed all:frontend/dist
+var assets embed.FS
+
 func main() {
+	// Create an instance of the app structure
+	app := NewApp()
 
-	jsonFile, err := os.Open("input.json")
+	// Create application with options
+	err := wails.Run(&options.App{
+		Title:  "webmatic_v2",
+		Width:  1024,
+		Height: 768,
+		AssetServer: &assetserver.Options{
+			Assets: assets,
+		},
+		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
+		OnStartup:        app.startup,
+		Bind: []interface{}{
+			app,
+		},
+	})
+
 	if err != nil {
-		log.Fatal(err)
+		println("Error:", err.Error())
 	}
-
-	defer jsonFile.Close()
-
-	fmt.Println(jsonFile)
-
-	project := webmaticlib.Project{}
-	byteVal, _ := ioutil.ReadAll(jsonFile)
-	json.Unmarshal(byteVal, &project)
-
-	fmt.Println(project)
-
-	l := launcher.New().Headless(project.Headless)
-	u := l.MustLaunch()
-	browser := rod.New().ControlURL(u).MustConnect()
-	projectRunner := webmaticlib.ProjectRunner{
-
-		Project: project,
-		Browser: browser,
-	}
-
-	projectRunner.Start()
-
-	time.Sleep(time.Hour)
-
 }

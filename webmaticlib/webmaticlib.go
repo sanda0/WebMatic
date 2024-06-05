@@ -27,17 +27,22 @@ func (r ProjectRunner) Start() error {
 	var page *rod.Page
 	for _, b := range r.Project.Blocks {
 		switch b.Type {
-		case "goto":
+		case "open":
 			page = r.Browser.MustPage(fmt.Sprintf("%v", b.Data["url"]))
 
 		case "write":
 			if page != nil {
-				page.MustElement(fmt.Sprintf("%v", b.Data["target"])).MustInput(fmt.Sprintf("%v", b.Data["text"]))
+				page.MustElement(fmt.Sprintf("%v", b.Data["target"])).MustInput(fmt.Sprintf("%v", b.Data["text"])).WaitLoad()
 			}
 
 		case "click":
 			if page != nil {
-				page.MustElement(fmt.Sprintf("%v", b.Data["target"])).MustClick()
+				page.MustElement(fmt.Sprintf("%v", b.Data["target"])).MustClick().WaitLoad()
+			}
+
+		case "navigate":
+			if page != nil {
+				page.MustNavigate(fmt.Sprintf("%v", b.Data["url"])).WaitLoad()
 			}
 		}
 

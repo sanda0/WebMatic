@@ -7,24 +7,38 @@
     "headless":false,
 		"blocks": [
 			{
-				"type": "goto",
+				"type": "open",
 				"data": {
-					"url": "http://www.w3schools.com/"
+					"url": "https://hardware-demo.malwattaholdings.lk/login"
 				}
 			},
       {
         "type":"write",
         "data":{
-          "target":"#search2",
-          "text":"go lang"
+          "target":"#email",
+          "text":"praveenchameera@gmail.com"
+        }
+      },
+      {
+        "type":"write",
+        "data":{
+          "target":"#password",
+          "text":"pramix2020"
         }
       },
       {
         "type":"click",
         "data":{
-          "target":"#learntocode_searchbtn"
+          "target":"body > div > form > div > div > div.login-body > button",
+          "wait":3
         }
-      }
+      },
+      {
+				"type": "navigate",
+				"data": {
+					"url": "https://hardware-demo.malwattaholdings.lk/product"
+				}
+			}
 		]
 	}
 
