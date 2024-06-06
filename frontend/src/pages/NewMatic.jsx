@@ -1,15 +1,24 @@
 import { useState } from "react";
 import Input from "../components/Input";
 import Button2 from "../components/Button2";
+import { Save } from "lucide-react";
+import { SaveMatic } from "../../wailsjs/go/main/App";
 
 export default function NewMatic() {
+	 
 	const [name, setname] = useState("");
 	const [author, setAuthor] = useState("");
 
-  function save(e){
-    console.log(name)
-    console.log(author)
-  }
+	function save(e)  {
+		console.log(name);
+		console.log(author);
+		SaveMatic(name, author).then((r)=>{
+			console.log(r);
+			if(r.status == 200){
+				
+			}
+		})
+	}
 
 	return (
 		<div className="content-center h-screen">
@@ -30,7 +39,14 @@ export default function NewMatic() {
 					></Input>
 					<div className="flex">
 						<div className="w-[100px] ms-auto me-3">
-							<Button2 onClick={(e)=>{save(e)}}> Save </Button2>
+							<Button2
+								onClick={(e) => {
+									save(e);
+								}}
+							>
+								{" "}
+								<Save /> Save{" "}
+							</Button2>
 						</div>
 					</div>
 				</div>

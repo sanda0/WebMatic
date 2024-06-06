@@ -9,3 +9,7 @@ export function FileUpload(arg1) {
 export function Greet(arg1) {
   return window['go']['main']['App']['Greet'](arg1);
 }
+
+export function SaveMatic(arg1, arg2) {
+  return window['go']['main']['App']['SaveMatic'](arg1, arg2);
+}

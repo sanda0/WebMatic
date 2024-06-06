@@ -3,7 +3,15 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
+
+	"github.com/sanda0/webmatic/webmaticlib"
 )
+
+type Response struct {
+	Status int         `json:"status"`
+	Data   interface{} `json:"data"`
+}
 
 // App struct
 type App struct {
@@ -28,4 +36,16 @@ func (a *App) Greet(name string) string {
 
 func (a *App) FileUpload(fileName string) int {
 	return 100
+}
+
+func (a *App) SaveMatic(name string, autor string) Response {
+	fileName, err := webmaticlib.SaveMatic(name, autor)
+	if err != nil {
+		log.Println(err.Error())
+		return Response{
+			Status: 500,
+			Data:   err.Error(),
+		}
+	}
+	return Response{Status: 200, Data: fileName}
 }
