@@ -8,7 +8,7 @@ import NewMatic from "../pages/NewMatic";
 
 const router = createBrowserRouter(createRoutesFromElements(
   <Route path="/" element={<MainLayout></MainLayout>}>
-    <Route path="" element={<NewMatic></NewMatic>}></Route>
+    <Route path="new" element={<NewMatic></NewMatic>}></Route>
   </Route>
 ));
 
