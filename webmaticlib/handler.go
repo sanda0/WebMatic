@@ -79,3 +79,14 @@ func SaveMatic(db *gorm.DB, name string, author string) (string, error) {
 	db.Create(&projectMap)
 	return fileName, nil
 }
+
+func GetAllMatics(db *gorm.DB) ([]ProjectMap, error) {
+	matics := []ProjectMap{}
+
+	res := db.Find(&matics)
+	if res.Error != nil {
+		return nil, res.Error
+	}
+	return matics, nil
+
+}

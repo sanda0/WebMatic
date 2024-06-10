@@ -60,3 +60,15 @@ func (a *App) SaveMatic(name string, autor string) Response {
 	}
 	return Response{Status: 200, Data: fileName}
 }
+
+func (a *App) GetAllMatics() Response {
+	matics, err := webmaticlib.GetAllMatics(a.DB)
+	if err != nil {
+		log.Println(err.Error())
+		return Response{
+			Status: 500,
+			Data:   err.Error(),
+		}
+	}
+	return Response{Status: 200, Data: matics}
+}

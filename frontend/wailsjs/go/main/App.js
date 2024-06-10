@@ -6,6 +6,10 @@ export function FileUpload(arg1) {
   return window['go']['main']['App']['FileUpload'](arg1);
 }
 
+export function GetAllMatics() {
+  return window['go']['main']['App']['GetAllMatics']();
+}
+
 export function Greet(arg1) {
   return window['go']['main']['App']['Greet'](arg1);
 }
