@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Button from "../components/Button";
-import { Play } from "lucide-react";
+import { Play, Save, Share2 } from "lucide-react";
 
 export default function Editor() {
 	const { name } = useParams();
@@ -11,16 +11,22 @@ export default function Editor() {
 	});
 
 	return (
-		<div className="h-screen p-0">
-			<div className="bg-slate-700 h-14">
-				<div className="w-10">
-					<Button>
-						{" "}
-						<Play></Play>{" "}
-					</Button>
+		<div className="h-screen p-2">
+			<div className="flex p-4 border rounded-md border-slate-700">
+				<div className="text-lg font-bold">{name}</div>
+				<div className="flex gap-3 ms-auto">
+					<button title="Run">
+						<Play></Play>
+					</button>
+					<button title="Save">
+						<Save></Save>
+					</button>
+					<button title="Share">
+						<Share2></Share2>
+					</button>
 				</div>
 			</div>
-			{name}
+			<div className="mt-4">{name}</div>
 		</div>
 	);
 }
