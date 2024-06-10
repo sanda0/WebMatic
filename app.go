@@ -6,6 +6,8 @@ import (
 	"log"
 
 	"github.com/sanda0/webmatic/webmaticlib"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 type Response struct {
@@ -16,6 +18,7 @@ type Response struct {
 // App struct
 type App struct {
 	ctx context.Context
+	DB  *gorm.DB
 }
 
 // NewApp creates a new App application struct
@@ -27,6 +30,14 @@ func NewApp() *App {
 // so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
+
+	var err error
+	a.DB, err = gorm.Open(sqlite.Open("data.db"), &gorm.Config{})
+	if err != nil {
+		log.Fatalf("failed to connect database: %v", err)
+	}
+
+	a.DB.AutoMigrate(&webmaticlib.ProjectMap{})
 }
 
 // Greet returns a greeting for the given name
@@ -39,7 +50,7 @@ func (a *App) FileUpload(fileName string) int {
 }
 
 func (a *App) SaveMatic(name string, autor string) Response {
-	fileName, err := webmaticlib.SaveMatic(name, autor)
+	fileName, err := webmaticlib.SaveMatic(a.DB, name, autor)
 	if err != nil {
 		log.Println(err.Error())
 		return Response{

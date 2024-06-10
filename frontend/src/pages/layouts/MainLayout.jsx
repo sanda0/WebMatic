@@ -9,7 +9,7 @@ export default function MainLayout() {
 
 
 	return (
-		<div className="flex w-full h-screen bg-slate-300">
+		<div className="flex w-full h-screen p-0 m-0 bg-slate-300">
 			<div className="h-screen w-[300px] bg-slate-700 text-white">
         <ul className="p-4 ">
           <li ><div className="text-4xl text-center">WebMatic</div></li>
@@ -24,7 +24,7 @@ export default function MainLayout() {
           </li>
         </ul>
       </div>
-      <div className="w-full h-screen">
+      <div className="w-full h-screen p-0 m-0" style={{paddingTop:10}}>
         <Outlet></Outlet>
       </div>
 		</div>

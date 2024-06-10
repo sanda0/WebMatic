@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"math/rand"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 // SaveStructToJSON saves a struct to a JSON file
@@ -54,7 +56,7 @@ func GenerateRandomString(length int) string {
 	return string(b)
 }
 
-func SaveMatic(name string, author string) (string, error) {
+func SaveMatic(db *gorm.DB, name string, author string) (string, error) {
 	matic := Project{
 		Name:        name,
 		Author:      author,
@@ -68,5 +70,12 @@ func SaveMatic(name string, author string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
+	projectMap := ProjectMap{
+		Name:     name,
+		Author:   author,
+		FileName: fileName,
+	}
+	db.Create(&projectMap)
 	return fileName, nil
 }

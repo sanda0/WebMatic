@@ -3,21 +3,22 @@ import Input from "../components/Input";
 import Button2 from "../components/Button2";
 import { Save } from "lucide-react";
 import { SaveMatic } from "../../wailsjs/go/main/App";
+import { useNavigate } from "react-router-dom";
 
 export default function NewMatic() {
-	 
 	const [name, setname] = useState("");
 	const [author, setAuthor] = useState("");
+	const navigate = useNavigate();
 
-	function save(e)  {
+	function save(e) {
 		console.log(name);
 		console.log(author);
-		SaveMatic(name, author).then((r)=>{
+		SaveMatic(name, author).then((r) => {
 			console.log(r);
-			if(r.status == 200){
-				
+			if (r.status == 200) {
+				navigate("/matic/" + r.data);
 			}
-		})
+		});
 	}
 
 	return (
