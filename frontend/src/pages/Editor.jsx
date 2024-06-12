@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Button from "../components/Button";
 import { Play, Save, Share2 } from "lucide-react";
+import BlockyEmbed from "../components/BlockyEmbed";
 
 export default function Editor() {
 	const { name } = useParams();
@@ -26,7 +27,9 @@ export default function Editor() {
 					</button>
 				</div>
 			</div>
-			<div className="mt-4">{name}</div>
+			<div className="mt-4 h-[80%]">
+				<BlockyEmbed></BlockyEmbed>
+			</div>
 		</div>
 	);
 }
