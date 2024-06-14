@@ -2,6 +2,7 @@ package main
 
 import (
 	"embed"
+	"fmt"
 	"os"
 
 	"github.com/wailsapp/wails/v2"
@@ -18,8 +19,6 @@ func main() {
 
 	// Create an instance of the app structure
 	app := NewApp()
-	
-	
 
 	// Create application with options
 	err := wails.Run(&options.App{
@@ -39,4 +38,5 @@ func main() {
 	if err != nil {
 		println("Error:", err.Error())
 	}
+	fmt.Println("start")
 }

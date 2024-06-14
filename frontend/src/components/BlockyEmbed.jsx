@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { BlocklyWorkspace } from "react-blockly";
+import "./../lib/customBlocks";
 
 export default function BlockyEmbed() {
 	const toolboxCategories = {
@@ -7,64 +8,76 @@ export default function BlockyEmbed() {
 		contents: [
 			{
 				kind: "category",
-				name: "Logic",
-				colour: "#5C81A6",
-				contents: [
-					{
-						kind: "block",
-						type: "controls_if",
-					},
-					{
-						kind: "block",
-						type: "logic_compare",
-					},
-				],
-			},
-			{
-				kind: "category",
-				name: "Math",
+				name: "Control",
 				colour: "#5CA65C",
 				contents: [
 					{
 						kind: "block",
-						type: "math_round",
+						type: "control_start",
 					},
 					{
 						kind: "block",
-						type: "math_number",
+						type: "control_navigate",
 					},
 				],
 			},
 			{
 				kind: "category",
-				name: "Custom",
-				colour: "#5CA699",
+				name: "Element",
+				colour: "#5B67A5",
 				contents: [
 					{
 						kind: "block",
-						type: "new_boundary_function",
+						type: "element_by_css_selector",
 					},
 					{
 						kind: "block",
-						type: "return",
+						type: "element_by_xpath_selector",
+					},
+				],
+			},
+			{
+				kind: "category",
+				name: "Actions",
+				colour: "#925AA5",
+				contents: [
+					{
+						kind: "block",
+						type: "action_click",
+					},
+					{
+						kind: "block",
+						type: "action_write",
+					},
+					{
+						kind: "block",
+						type: "action_wait",
 					},
 				],
 			},
 		],
 	};
-	const initialXml =
-		'<xml xmlns="http://www.w3.org/1999/xhtml"><block type="text" x="70" y="30"><field name="TEXT"></field></block></xml>';
 
-	const [xml, setXml] = useState(
-		'<xml xmlns="http://www.w3.org/1999/xhtml"><block type="text" x="70" y="30"><field name="TEXT"></field></block></xml>'
-	);
+	// 5B67A5
+
+	const [json, setJson] = useState();
 
 	return (
-		<BlocklyWorkspace
-			className="w-full h-[89vh]" // you can use whatever classes are appropriate for your app's CSS
-			toolboxConfiguration={toolboxCategories} // this must be a JSON toolbox definition
-			initialXml={xml}
-			onXmlChange={setXml}
-		/>
+		<>
+			<BlocklyWorkspace
+				className="w-full h-[89vh]" // you can use whatever classes are appropriate for your app's CSS
+				toolboxConfiguration={toolboxCategories} // this must be a JSON toolbox definition
+				initialJson={json}
+				onJsonChange={(j) => {
+					let a = JSON.stringify(j);
+					let b = btoa(a);
+					console.log(b);
+
+					let c = atob(b);
+
+					console.log(c);
+				}}
+			/>
+		</>
 	);
 }

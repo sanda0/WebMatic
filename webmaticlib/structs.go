@@ -12,4 +12,5 @@ type Project struct {
 	CreateAt    string  `json:"createAt"`
 	Headless    bool    `json:"headless"`
 	Blocks      []Block `json:"blocks"`
+	Base64      string  `json:"base64"`
 }
