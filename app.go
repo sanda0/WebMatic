@@ -72,3 +72,10 @@ func (a *App) GetAllMatics() Response {
 	}
 	return Response{Status: 200, Data: matics}
 }
+
+func (a *App) RunMatic(jsonStr string) {
+
+	// fmt.Println(jsonStr)
+	webmaticlib.RunMatic(jsonStr)
+
+}

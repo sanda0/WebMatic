@@ -8,4 +8,6 @@ export function GetAllMatics():Promise<main.Response>;
 
 export function Greet(arg1:string):Promise<string>;
 
+export function RunMatic(arg1:string):Promise<void>;
+
 export function SaveMatic(arg1:string,arg2:string):Promise<main.Response>;

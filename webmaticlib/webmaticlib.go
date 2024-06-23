@@ -18,16 +18,18 @@ type ProjectRunner struct {
 
 func NewProjectRunner(project Project, browser *rod.Browser) ProjectRunner {
 	return ProjectRunner{
-		Project: Project{},
+		Project: project,
 		Browser: browser,
 	}
 }
 
 func (r ProjectRunner) Start() error {
+	fmt.Println(r.Project)
 	var page *rod.Page
 	for _, b := range r.Project.Blocks {
 		switch b.Type {
 		case "open":
+			fmt.Println(b.Data["url"])
 			page = r.Browser.MustPage(fmt.Sprintf("%v", b.Data["url"]))
 
 		case "write":

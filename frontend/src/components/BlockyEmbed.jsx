@@ -2,7 +2,7 @@ import { useState } from "react";
 import { BlocklyWorkspace } from "react-blockly";
 import "./../lib/customBlocks";
 
-export default function BlockyEmbed() {
+export default function BlockyEmbed(props) {
 	const toolboxCategories = {
 		kind: "categoryToolbox",
 		contents: [
@@ -70,12 +70,14 @@ export default function BlockyEmbed() {
 				initialJson={json}
 				onJsonChange={(j) => {
 					let a = JSON.stringify(j);
+					props.onChange(a)
 					let b = btoa(a);
-					console.log(b);
+					// console.log(b);
 
 					let c = atob(b);
 
-					console.log(c);
+					// console.log(c);
+
 				}}
 			/>
 		</>
