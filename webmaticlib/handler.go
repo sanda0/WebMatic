@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
+
 	"math/rand"
 	"time"
 
@@ -60,32 +60,21 @@ func GenerateRandomString(length int) string {
 	return string(b)
 }
 
-func SaveMatic(db *gorm.DB, name string, author string) (string, error) {
-	matic := Project{
+func SaveMatic(db *gorm.DB, name string, author string) (uint, error) {
+
+	project := Project{
 		Name:        name,
 		Author:      author,
-		CreateAt:    time.Now().String(),
 		Description: "",
 		Headless:    false,
-		Blocks:      []Block{},
+		XMLData:     `<xml xmlns="http://www.w3.org/1999/xhtml"></xml>`,
 	}
-	fileName := GenerateRandomString(5) + ".matic.json"
-	err := SaveStructToJSON("matics/"+fileName, matic)
-	if err != nil {
-		return "", err
-	}
-
-	projectMap := ProjectMap{
-		Name:     name,
-		Author:   author,
-		FileName: fileName,
-	}
-	db.Create(&projectMap)
-	return fileName, nil
+	db.Create(&project)
+	return project.ID, nil
 }
 
-func GetAllMatics(db *gorm.DB) ([]ProjectMap, error) {
-	matics := []ProjectMap{}
+func GetAllMatics(db *gorm.DB) ([]Project, error) {
+	matics := []Project{}
 
 	res := db.Find(&matics)
 	if res.Error != nil {
@@ -95,95 +84,30 @@ func GetAllMatics(db *gorm.DB) ([]ProjectMap, error) {
 
 }
 
-func CreateActionBlocks(p *Project, action []byte, selector string) {
-	at, _, _, err := jsonparser.Get(action, "type")
-	if err != nil {
-		fmt.Println(err.Error())
-		return
+func GetMaticById(db *gorm.DB, id uint) (*Project, error) {
+	matic := &Project{}
+	res := db.First(&matic, id)
+	if res.Error != nil {
+		return nil, res.Error
 	}
-	switch string(at) {
-	case "action_click":
+	return matic, nil
+}
 
-		p.Blocks = append(p.Blocks, Block{
-			Type: "click",
-			Data: map[string]interface{}{
-				"target": selector,
-			},
-		})
+func SaveXML(db *gorm.DB, id uint, data string) error {
+	matic := &Project{}
+	res := db.First(&matic, id)
+	if res.Error != nil {
+		return res.Error
+	}
 
-	case "action_write":
-		txt, _, _, err := jsonparser.Get(action, "fields", "txt")
-		if err != nil {
-			log.Println(err.Error())
-			return
-		}
-		p.Blocks = append(p.Blocks, Block{
-			Type: "write",
-			Data: map[string]interface{}{
-				"target": selector,
-				"text":   string(txt),
-			},
-		})
-		//TODO: add other actions
-	}
-	//check next
-	next_action, _, _, err := jsonparser.Get(action, "next", "block")
-	if err != nil {
-		fmt.Println(err.Error())
-		return
-	}
-	nt, _, _, err := jsonparser.Get(next_action, "type") //next action type
-	if err != nil {
-		fmt.Println(err.Error())
-		return
-	}
-	if string(nt) == "action_click" || string(nt) == "action_write" || string(nt) == "action_wait" {
-		CreateActionBlocks(p, next_action, selector)
-	}
+	matic.XMLData = data
+	db.Save(matic)
+
+	return nil
 
 }
 
-func CreateBlocksForCssSelectorElement(p *Project, element []byte) {
-	t, _, _, err := jsonparser.Get(element, "type")
-	if err != nil {
-		fmt.Println(err.Error())
-		return
-	}
-	if string(t) == "element_by_css_selector" {
-		css_selector_path, _, _, err := jsonparser.Get(element, "fields", "css_selector")
-		if err != nil {
-			fmt.Println(err.Error())
-			return
-		}
-		fmt.Println("")
-		fmt.Println(string(css_selector_path))
-		//get action blocks
-		action, _, _, err := jsonparser.Get(element, "inputs", "actions", "block")
-		if err != nil {
-			fmt.Println(err.Error())
-
-		} else {
-			CreateActionBlocks(p, action, string(css_selector_path))
-		}
-		fmt.Println("")
-
-		next_element, _, _, err := jsonparser.Get(element, "next", "block")
-		if err != nil {
-			fmt.Println(err.Error())
-			return
-		}
-		nt, _, _, err := jsonparser.Get(next_element, "type") //next element type
-		if err != nil {
-			fmt.Println(err.Error())
-			return
-		}
-		if string(nt) == "element_by_css_selector" {
-			CreateBlocksForCssSelectorElement(p, next_element)
-		}
-
-	}
-}
-
+// TODO: get opening project id as parameter
 func RunMatic(jsonStr string) {
 	// p := Project{}
 	// fmt.Println(p)
@@ -207,10 +131,10 @@ func RunMatic(jsonStr string) {
 				fmt.Println(err.Error())
 				return
 			}
-			p := Project{
+			bc := BlockContainer{
 				Headless: false,
 			}
-			p.Blocks = append(p.Blocks, Block{
+			bc.Blocks = append(bc.Blocks, Block{
 				Type: "open",
 				Data: map[string]interface{}{"url": string(url)},
 			})
@@ -221,13 +145,13 @@ func RunMatic(jsonStr string) {
 				fmt.Println(err.Error())
 				return
 			}
-			CreateBlocksForCssSelectorElement(&p, elements)
+			CreateBlocksForCssSelectorElement(&bc, elements)
 
 			//create project runer
-			l := launcher.New().Headless(p.Headless)
+			l := launcher.New().Headless(bc.Headless)
 			u := l.MustLaunch()
 			browser := rod.New().ControlURL(u).MustConnect()
-			runer := NewProjectRunner(p, browser)
+			runer := NewProjectRunner(bc, browser)
 			runer.Start()
 			time.Sleep(time.Minute * 2)
 		}

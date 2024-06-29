@@ -29,8 +29,7 @@
       {
         "type":"click",
         "data":{
-          "target":"body > div > form > div > div > div.login-body > button",
-          "wait":3
+          "target":"body > div > form > div > div > div.login-body > button"
         }
       },
       {

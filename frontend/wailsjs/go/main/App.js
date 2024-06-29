@@ -10,6 +10,10 @@ export function GetAllMatics() {
   return window['go']['main']['App']['GetAllMatics']();
 }
 
+export function GetMaticById(arg1) {
+  return window['go']['main']['App']['GetMaticById'](arg1);
+}
+
 export function Greet(arg1) {
   return window['go']['main']['App']['Greet'](arg1);
 }
@@ -20,4 +24,8 @@ export function RunMatic(arg1) {
 
 export function SaveMatic(arg1, arg2) {
   return window['go']['main']['App']['SaveMatic'](arg1, arg2);
+}
+
+export function SaveXML(arg1, arg2) {
+  return window['go']['main']['App']['SaveXML'](arg1, arg2);
 }

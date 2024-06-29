@@ -12,21 +12,21 @@ func ReadJson(content []byte) ([]Block, error) {
 }
 
 type ProjectRunner struct {
-	Project Project
-	Browser *rod.Browser
+	BlockContainer BlockContainer
+	Browser        *rod.Browser
 }
 
-func NewProjectRunner(project Project, browser *rod.Browser) ProjectRunner {
+func NewProjectRunner(blockContainer BlockContainer, browser *rod.Browser) ProjectRunner {
 	return ProjectRunner{
-		Project: project,
-		Browser: browser,
+		BlockContainer: blockContainer,
+		Browser:        browser,
 	}
 }
 
 func (r ProjectRunner) Start() error {
-	fmt.Println(r.Project)
+
 	var page *rod.Page
-	for _, b := range r.Project.Blocks {
+	for _, b := range r.BlockContainer.Blocks {
 		switch b.Type {
 		case "open":
 			fmt.Println(b.Data["url"])
@@ -44,6 +44,7 @@ func (r ProjectRunner) Start() error {
 
 		case "navigate":
 			if page != nil {
+				fmt.Printf("this is url : %v", b.Data["url"])
 				page.MustNavigate(fmt.Sprintf("%v", b.Data["url"])).WaitLoad()
 			}
 		}

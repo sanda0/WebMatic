@@ -12,7 +12,7 @@ const router = createBrowserRouter(createRoutesFromElements(
   <Route path="/" element={<MainLayout></MainLayout>}>
     <Route path="" element={<Home></Home>}></Route>
     <Route path="new" element={<NewMatic></NewMatic>}></Route>
-    <Route path="matic/:name" element={<Editor></Editor>}></Route>
+    <Route path="matic/:id" element={<Editor></Editor>}></Route>
   </Route>
 ));
 

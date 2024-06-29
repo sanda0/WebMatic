@@ -1,7 +1,7 @@
 import { Edit, Play, Share2, Trash } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-export default function MaticItem({ name, file }) {
+export default function MaticItem({ name, id }) {
   const navigate = useNavigate()
 	return (
 		<div className="flex p-4 border rounded-md border-slate-700">
@@ -10,7 +10,7 @@ export default function MaticItem({ name, file }) {
 				<button
 					title="Edit"
 					onClick={() => {
-						navigate("/matic/" + file);
+						navigate("/matic/" + id);
 					}}
 				>
 					<Edit></Edit>

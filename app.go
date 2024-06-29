@@ -37,7 +37,7 @@ func (a *App) startup(ctx context.Context) {
 		log.Fatalf("failed to connect database: %v", err)
 	}
 
-	a.DB.AutoMigrate(&webmaticlib.ProjectMap{})
+	a.DB.AutoMigrate(&webmaticlib.Project{})
 }
 
 // Greet returns a greeting for the given name
@@ -71,6 +71,28 @@ func (a *App) GetAllMatics() Response {
 		}
 	}
 	return Response{Status: 200, Data: matics}
+}
+
+func (a *App) GetMaticById(id uint) Response {
+	matic, err := webmaticlib.GetMaticById(a.DB, id)
+	if err != nil {
+		return Response{
+			Status: 500,
+			Data:   err.Error(),
+		}
+	}
+	return Response{Status: 200, Data: matic}
+}
+
+func (a *App) SaveXML(id uint, data string) Response {
+	err := webmaticlib.SaveXML(a.DB, id, data)
+	if err != nil {
+		return Response{
+			Status: 500,
+			Data:   err.Error(),
+		}
+	}
+	return Response{Status: 200, Data: "xml saved"}
 }
 
 func (a *App) RunMatic(jsonStr string) {
