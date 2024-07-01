@@ -5,6 +5,7 @@ go 1.21
 toolchain go1.22.0
 
 require (
+	github.com/buger/jsonparser v1.1.1
 	github.com/go-rod/rod v0.116.0
 	github.com/wailsapp/wails/v2 v2.8.2
 	gorm.io/driver/sqlite v1.5.5

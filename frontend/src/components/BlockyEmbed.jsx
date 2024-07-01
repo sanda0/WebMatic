@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BlocklyWorkspace } from "react-blockly";
 import "./../lib/customBlocks";
 
-export default function BlockyEmbed() {
+export default function BlockyEmbed(props) {
 	const toolboxCategories = {
 		kind: "categoryToolbox",
 		contents: [
@@ -58,24 +58,21 @@ export default function BlockyEmbed() {
 		],
 	};
 
-	// 5B67A5
 
-	const [json, setJson] = useState();
+
 
 	return (
 		<>
 			<BlocklyWorkspace
-				className="w-full h-[89vh]" // you can use whatever classes are appropriate for your app's CSS
-				toolboxConfiguration={toolboxCategories} // this must be a JSON toolbox definition
-				initialJson={json}
+				className="w-full h-[89vh]"
+				toolboxConfiguration={toolboxCategories}
 				onJsonChange={(j) => {
 					let a = JSON.stringify(j);
-					let b = btoa(a);
-					console.log(b);
-
-					let c = atob(b);
-
-					console.log(c);
+					props.onJsonChange(a);
+				}}
+				initialXml={props.xml_data}
+				onXmlChange={(x) => {
+					props.onChange(x);
 				}}
 			/>
 		</>

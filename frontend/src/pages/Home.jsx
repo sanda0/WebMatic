@@ -26,7 +26,7 @@ export default function Home() {
 				<div className="grid grid-cols-1 gap-4 mt-4">
             {matics.map((e,i)=>{
               console.log(e);
-              return <MaticItem key={i} name={e.name} file={e.file_name} onEdit={(f)=>onEdit}></MaticItem>
+              return <MaticItem key={i} name={e.name} id={e.ID} onEdit={(f)=>onEdit}></MaticItem>
             })}
         </div>
 			</div>
